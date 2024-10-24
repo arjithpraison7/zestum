@@ -21,22 +21,17 @@ class _ZestumScentBarHomeState extends State<ZestumScentBarHome> {
             activePane = _getPaneName(index);
           });
         },
-        displayMode: PaneDisplayMode.compact,  // Kompakter Menü-Stil
+        displayMode: PaneDisplayMode.compact,
         items: [
           PaneItem(
             icon: const Icon(FluentIcons.screen_cast),
             title: const Text('Share Screen'),
-            body: const SharePane(), // Hier wird der entsprechende Inhalt gesetzt
+            body: const SharePane(),
           ),
           PaneItem(
-            icon: const Icon(FluentIcons.c_c_solid),
+            icon: const Icon(FluentIcons.branch_commit),
             title: const Text('Test Device'),
             body: const DebugPane(),
-          ),
-          PaneItem(
-            icon: const Icon(FluentIcons.t_v_monitor_selected),
-            title: const Text('Scent Level'),
-            body: const ScentPane(),
           ),
           PaneItem(
             icon: const Icon(FluentIcons.info),
@@ -54,10 +49,8 @@ class _ZestumScentBarHomeState extends State<ZestumScentBarHome> {
         return 0;
       case 'debug':
         return 1;
-      case 'scent':
-        return 2;
       case 'about':
-        return 3;
+        return 2;
       default:
         return 0;
     }
@@ -70,8 +63,6 @@ class _ZestumScentBarHomeState extends State<ZestumScentBarHome> {
       case 1:
         return 'debug';
       case 2:
-        return 'scent';
-      case 3:
         return 'about';
       default:
         return 'share';

@@ -13,7 +13,7 @@ class ZestumScentBarApp extends StatelessWidget {
     return FluentApp(
       title: 'Zestum Scent Bar',
       theme: FluentThemeData(
-        accentColor: Colors.blue,  // Windows-typische Akzentfarbe
+        accentColor: Colors.blue,
       ),
       home: const ZestumScentBarHome(),
     );

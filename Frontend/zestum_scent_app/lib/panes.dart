@@ -1,7 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
 class SharePane extends StatelessWidget {
-  const SharePane({Key? key}) : super(key: key);
+  const SharePane({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class SharePane extends StatelessWidget {
 }
 
 class DebugPane extends StatelessWidget {
-  const DebugPane({Key? key}) : super(key: key);
+  const DebugPane({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -84,33 +84,8 @@ class DebugPane extends StatelessWidget {
   }
 }
 
-class ScentPane extends StatelessWidget {
-  const ScentPane({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Acrylic(
-      luminosityAlpha: 0.5,
-      blurAmount: 20.0,
-      tint: Colors.green,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: List.generate(10, (index) {
-            return Text(
-              'Scent ${index + 1}: ${100 - index * 5} ml',
-              style: const TextStyle(fontSize: 16),
-            );
-          }),
-        ),
-      ),
-    );
-  }
-}
-
 class AboutPane extends StatelessWidget {
-  const AboutPane({Key? key}) : super(key: key);
+  const AboutPane({super.key});
 
   @override
   Widget build(BuildContext context) {

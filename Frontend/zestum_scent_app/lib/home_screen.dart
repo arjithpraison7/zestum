@@ -1,14 +1,17 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'panes.dart';
+import 'panes/about_pane.dart';
+import 'panes/debug_pane.dart';
+import 'panes/share_pane.dart';
+import 'widgets/connection_status.dart';
 
 class ZestumScentBarHome extends StatefulWidget {
   const ZestumScentBarHome({super.key});
 
   @override
-  _ZestumScentBarHomeState createState() => _ZestumScentBarHomeState();
+  ZestumScentBarHomeState createState() => ZestumScentBarHomeState();
 }
 
-class _ZestumScentBarHomeState extends State<ZestumScentBarHome> {
+class ZestumScentBarHomeState extends State<ZestumScentBarHome> {
   String activePane = 'home';
 
   @override
@@ -37,6 +40,12 @@ class _ZestumScentBarHomeState extends State<ZestumScentBarHome> {
             icon: const Icon(FluentIcons.info),
             title: const Text('About'),
             body: const AboutPane(),
+          ),
+        ],
+        footerItems: [
+          PaneItem(
+            icon: const Icon(FluentIcons.add_connection), 
+            body: const ConnectionStatus(isConnected: true),
           ),
         ],
       ),

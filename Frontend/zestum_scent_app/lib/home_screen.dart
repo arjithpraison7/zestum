@@ -18,6 +18,7 @@ class ZestumScentBarHomeState extends State<ZestumScentBarHome> {
   Widget build(BuildContext context) {
     return NavigationView(
       pane: NavigationPane(
+        header: const Text("Scent-Bar Configuration Board"),
         selected: _getSelectedIndex(activePane),
         onChanged: (index) {
           setState(() {
@@ -26,6 +27,7 @@ class ZestumScentBarHomeState extends State<ZestumScentBarHome> {
         },
         displayMode: PaneDisplayMode.compact,
         items: [
+          PaneItemSeparator(),
           PaneItem(
             icon: const Icon(FluentIcons.screen_cast),
             title: const Text('Share Screen'),
@@ -43,9 +45,11 @@ class ZestumScentBarHomeState extends State<ZestumScentBarHome> {
           ),
         ],
         footerItems: [
+          PaneItemSeparator(),
           PaneItem(
-            icon: const Icon(FluentIcons.add_connection), 
-            body: const ConnectionStatus(isConnected: true),
+            icon: const Icon(FluentIcons.add_connection),
+            title: const Text("Status: "),
+            body: const ConnectionStatus(isConnected: true,),
           ),
         ],
       ),

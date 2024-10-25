@@ -10,26 +10,23 @@ class ConnectionStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {},
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            isConnected ? FluentIcons.plug_connected : FluentIcons.plug_disconnected,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          isConnected ? FluentIcons.plug_connected : FluentIcons.plug_disconnected,
+          color: isConnected ? Colors.green : Colors.red,
+        ),
+        const SizedBox(width: 8),
+        Text(
+          isConnected ? 'Device Connected' : 'Device Disconnected',
+          style: TextStyle(
+            fontSize: 16,
             color: isConnected ? Colors.green : Colors.red,
+            fontWeight: FontWeight.bold,
           ),
-          const SizedBox(width: 8),
-          Text(
-            isConnected ? 'Device Connected' : 'Device Disconnected',
-            style: TextStyle(
-              fontSize: 16,
-              color: isConnected ? Colors.green : Colors.red,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

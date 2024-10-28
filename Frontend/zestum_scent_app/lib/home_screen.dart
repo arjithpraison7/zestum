@@ -46,10 +46,13 @@ class ZestumScentBarHomeState extends State<ZestumScentBarHome> {
         ],
         footerItems: [
           PaneItemSeparator(),
-          PaneItem(
-            icon: const Icon(FluentIcons.add_connection),
+          PaneItemAction(
+            icon: Icon(FluentIcons.plug_connected, color: Colors.green,),
             title: const Text("Status: "),
-            body: const ConnectionStatus(isConnected: true,),
+            trailing: const ConnectionStatus(isConnected: true),
+            onTap: () {
+              
+            },
           ),
         ],
       ),
@@ -65,7 +68,7 @@ class ZestumScentBarHomeState extends State<ZestumScentBarHome> {
       case 'about':
         return 2;
       default:
-        return 0;
+        return 1;
     }
   }
 
@@ -78,7 +81,7 @@ class ZestumScentBarHomeState extends State<ZestumScentBarHome> {
       case 2:
         return 'about';
       default:
-        return 'share';
+        return 'debug';
     }
   }
 }

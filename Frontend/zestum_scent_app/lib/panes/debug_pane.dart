@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:flutter_libserialport/flutter_libserialport.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'dart:async';
 
 class DebugPane extends StatefulWidget {
   const DebugPane({super.key});
@@ -13,64 +14,81 @@ class _DebugPaneState extends State<DebugPane> {
   late SerialPort? _port;
   bool isConnected = false;
   final int baudRate = 115200;
-  final List<bool> fanStates = List.generate(10, (_) => false); // Lüfterstatus
+  final List<bool> fanStates = List.generate(10, (_) => false);
+  Timer? _connectionCheckTimer;
 
   @override
   void initState() {
     super.initState();
     _initializeSerialConnection();
+    _startConnectionCheck();
   }
 
-  // Funktion zur seriellen Verbindung
   void _initializeSerialConnection() {
     final availablePorts = SerialPort.availablePorts;
     if (availablePorts.isNotEmpty) {
-      _port = SerialPort(availablePorts[0]); // Erster gefundener Port
+      _port = SerialPort(availablePorts[0]);
       _port!.config.baudRate = baudRate;
 
       if (_port!.openReadWrite()) {
         setState(() => isConnected = true);
-        print("Verbindung erfolgreich hergestellt.");
-        _sendCommandToESP("-1, connected"); // Befehl nach Verbindungsaufbau senden
-
-        // Alle Lüfter ausschalten, nachdem die Verbindung hergestellt wurde
-        _turnOffAllFans(); // Funktion zum Ausschalten aller Lüfter
+        print("Connection successful.");
+        _sendCommandToESP("-1, connected");
+        _turnOffAllFans();
       } else {
-        print("Verbindung konnte nicht hergestellt werden.");
+        print("Not able to connect.");
         setState(() => isConnected = false);
       }
     } else {
-      print("Keine verfügbaren seriellen Ports gefunden.");
+      print("No ports found.");
       setState(() => isConnected = false);
     }
   }
 
-  // Funktion zum Senden von Kommandos an den ESP
+  void _startConnectionCheck() {
+    _connectionCheckTimer = Timer.periodic(const Duration(seconds: 2), (timer) {
+      if (_port == null || !_port!.isOpen) {
+        setState(() {
+          isConnected = false;
+          _port?.close();
+        });
+        print("Connection to device is lost.");
+        _turnOffAllFans();
+      }
+    });
+  }
+
   void _sendCommandToESP(String command) {
-    if (_port != null && isConnected) {
-      final data = Uint8List.fromList('$command\n'.codeUnits);
-      _port!.write(data);
+    if (_port != null && isConnected && _port!.isOpen) {
+      try {
+        final data = Uint8List.fromList('$command\n'.codeUnits);
+        _port!.write(data);
+      } catch (e) {
+        print("Error on sending data: $e");
+      }
+    } else {
+      print("Port is not open or not connected.");
     }
   }
 
-  // Alle Lüfter ausschalten
+
   void _turnOffAllFans() {
     for (int fanNumber = 1; fanNumber <= 10; fanNumber++) {
-      _toggleFan(fanNumber, false); // Alle Lüfter ausschalten
+      _toggleFan(fanNumber, false);
     }
   }
 
-  // Lüfter Ein-/Ausschalten
+  
   void _toggleFan(int fanNumber, bool turnOn) {
     final action = turnOn ? 'on' : 'off';
     final command = '$fanNumber, $action';
     _sendCommandToESP(command);
     setState(() {
-      fanStates[fanNumber - 1] = turnOn; // Status des Lüfters aktualisieren
+      fanStates[fanNumber - 1] = turnOn;
     });
   }
 
-  // Button zur erneuten Verbindung
+  
   void _reconnect() {
     _port?.close();
     _initializeSerialConnection();
@@ -78,6 +96,7 @@ class _DebugPaneState extends State<DebugPane> {
 
   @override
   void dispose() {
+    _connectionCheckTimer?.cancel();
     _port?.close();
     super.dispose();
   }
@@ -92,7 +111,7 @@ class _DebugPaneState extends State<DebugPane> {
           Row(
             children: [
               Text(
-                isConnected ? 'Verbindung hergestellt' : 'Keine Verbindung',
+                isConnected ? 'Device Connected' : 'Device Not Connected',
                 style: TextStyle(
                   color: isConnected ? Colors.green : Colors.red,
                   fontWeight: FontWeight.bold,
@@ -102,14 +121,14 @@ class _DebugPaneState extends State<DebugPane> {
               const SizedBox(width: 16),
               Button(
                 onPressed: isConnected ? _reconnect : _initializeSerialConnection,
-                child: Text(isConnected ? 'Neu verbinden' : 'Verbinden'),
+                child: Text(isConnected ? 'Reconnect' : 'Connect'),
               ),
             ],
           ),
           const SizedBox(height: 16),
           Wrap(
-            spacing: 16, // Abstand zwischen den Lüftern
-            runSpacing: 16, // Abstand zwischen den Zeilen
+            spacing: 16,
+            runSpacing: 16,
             children: List.generate(10, (index) {
               final fanNumber = index + 1;
               return Column(
@@ -119,10 +138,10 @@ class _DebugPaneState extends State<DebugPane> {
                   const SizedBox(height: 4),
                   Button(
                     onPressed: () {
-                      final turnOn = !fanStates[index]; // Status umkehren
+                      final turnOn = !fanStates[index];
                       _toggleFan(fanNumber, turnOn);
                     },
-                    child: Text(fanStates[index] ? 'Ausschalten' : 'Einschalten'),
+                    child: Text(fanStates[index] ? 'Off' : 'On'),
                   ),
                 ],
               );

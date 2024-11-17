@@ -12,10 +12,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
     
   cupertino_icons: ^1.0.8
   fluent_ui: ^4.9.2
   flutter_libserialport: ^0.4.0
+  flutter_webrtc: ^0.12.1+hotfix.1
+  videosdk_webrtc: ^0.0.4
+  videosdk: ^1.2.3
 
 dev_dependencies:
   flutter_test:

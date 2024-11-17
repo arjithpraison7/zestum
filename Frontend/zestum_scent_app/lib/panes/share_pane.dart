@@ -1,4 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:videosdk_webrtc/flutter_webrtc.dart';
+import '../screen_select_dialog.dart';  // Import the ScreenSelectDialog widget
 
 class SharePane extends StatelessWidget {
   const SharePane({super.key});
@@ -20,15 +22,39 @@ class SharePane extends StatelessWidget {
             const SizedBox(height: 16),
             Button(
               child: const Text('Share Window'),
-              onPressed: () {
-                // Logic für Window Sharing
+              onPressed: () async {
+                // Open ScreenSelectDialog to choose a window
+                final selectedSource = await showDialog<DesktopCapturerSource>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const ScreenSelectDialog();  // Show screen/window selection dialog
+                  },
+                );
+
+                if (selectedSource != null) {
+                  // Handle the selected source for sharing the window
+                  // You can add the logic here to start window sharing with selectedSource
+                  print('Window selected: ${selectedSource.name}');
+                }
               },
             ),
             const SizedBox(height: 8),
             Button(
               child: const Text('Share Screen'),
-              onPressed: () {
-                // Logic für Screen Sharing
+              onPressed: () async {
+                // Open ScreenSelectDialog to choose a screen
+                final selectedSource = await showDialog<DesktopCapturerSource>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const ScreenSelectDialog();  // Show screen/window selection dialog
+                  },
+                );
+
+                if (selectedSource != null) {
+                  // Handle the selected source for sharing the screen
+                  // You can add the logic here to start screen sharing with selectedSource
+                  print('Screen selected: ${selectedSource.name}');
+                }
               },
             ),
           ],

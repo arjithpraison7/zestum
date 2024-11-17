@@ -4,6 +4,10 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   flutter_libserialport
+  flutter_webrtc
+  permission_handler_windows
+  videosdk
+  videosdk_webrtc
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST
